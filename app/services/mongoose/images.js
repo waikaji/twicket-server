@@ -1,12 +1,5 @@
 const Images = require('../../api/v1/images/model');
-
-
-// generate url setelah submit baru kita simpan
-const generateUrlImage = async (req) => {
-  const result = `uploads/${req.file.filename}`;
-
-  return result;
-}
+const { NotFoundError } = require('../../errors');
 
 // cara yang kita gunakan untuk menyimpan gambar
 const createImages = async (req) => {
@@ -19,4 +12,12 @@ const createImages = async (req) => {
   return result;
 }
 
-module.exports = { createImages, generateUrlImage };
+const checkingImage = async (id) => {
+  const result = await Images.findOne({ _id: id });
+
+  if (!result) throw new NotFoundError(`Tidak ada Gambar dengan id: ${id}`);
+
+  return result;
+}
+
+module.exports = { createImages, checkingImage };
