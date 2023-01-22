@@ -4,7 +4,7 @@ const { BadRequestError } = require('../../errors');
 const { StatusCodes } = require('http-status-codes');
 
 const createOrganizer = async (req) => {
-  const { organizer, email, password, confirmPassword, name } = req.body;
+  const { organizer, email, password, confirmPassword, role, name } = req.body;
 
   if (password !== confirmPassword) {
     throw new BadRequestError('Password dan confirmPassword tidak cocok');
@@ -17,6 +17,7 @@ const createOrganizer = async (req) => {
     name,
     password,
     organizer: result._id,
+    role,
   });
 
   delete users._doc.password;
@@ -45,5 +46,10 @@ const createUsers = async (req, res) => {
   return result;
 }
 
+const getAllUsers = async (req) => {
+  const result = await Users.find();
 
-module.exports = { createOrganizer, createUsers };
+  return result;
+};
+
+module.exports = { createOrganizer, createUsers, getAllUsers };
